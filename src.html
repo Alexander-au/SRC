@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Excel to Chart</title>
+</head>
+<body>
+  <h1>Upload Excel File and Plot Data</h1>
+  
+  <!-- File input -->
+  <input type="file" id="excelFile" accept=".xlsx, .xls" />
+  
+  <!-- Chart container -->
+  <div style="width: 80%; max-width: 800px; margin-top: 30px;">
+    <canvas id="myChart"></canvas>
+  </div>
+  
+  <!-- SheetJS (xlsx) from CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <!-- Chart.js from CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.0.1/dist/chart.umd.min.js"></script>
+  
+  <script>
+    // Grabbing references to our DOM elements
+    const fileInput = document.getElementById('excelFile');
+    const chartCanvas = document.getElementById('myChart');
+    let myChart; // We'll store the Chart.js instance here
+    
+    // Event listener for file input
+    fileInput.addEventListener('change', handleFile, false);
+    
+    function handleFile(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const data = new Uint8Array(e.target.result);
+        // Read the workbook from the binary data
+        const workbook = XLSX.read(data, { type: 'array' });
+        
+        // Get the first worksheet name (for simplicity)
+        const firstSheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[firstSheetName];
+        
+        // Convert the sheet to JSON
+        const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+        // jsonData is an array of arrays, e.g.:
+        // [
+        //   ["Header1", "Header2", "Header3"],
+        //   [ value1,   value2,    value3   ],
+        //   [ value1,   value2,    value3   ],
+        //   ...
+        // ]
+        
+        // The first row is assumed to be headers:
+        const headers = jsonData[0];
+        
+        // The remaining rows (if any) are data
+        const dataRows = jsonData.slice(1);
+        
+        // If there's nothing to plot, just exit
+        if (!headers || headers.length === 0 || dataRows.length === 0) {
+          alert("No valid data found in the uploaded file.");
+          return;
+        }
+        
+        // Let's assume the first column will be the x-axis labels, 
+        // and the other columns will be separate datasets
+        //
+        // If the first column is not your labels, adjust accordingly.
+        
+        // Extract labels from the first column
+        const labels = dataRows.map(row => row[0]);
+        
+        // Prepare datasets for columns 2..N
+        // We'll skip column 0 since it's used as labels
+        const datasets = [];
+        
+        for (let col = 1; col < headers.length; col++) {
+          const columnName = headers[col];
+          
+          // Build an array of values for each row in this column
+          const colData = dataRows.map(row => {
+            // If the row doesn't have enough columns, return null/NaN
+            return (row[col] !== undefined) ? Number(row[col]) : null;
+          });
+          
+          datasets.push({
+            label: columnName,
+            data: colData,
+          });
+        }
+        
+        // Now let's plot with Chart.js
+        // If there's an existing chart, destroy it before creating a new one
+        if (myChart) {
+          myChart.destroy();
+        }
+        
+        myChart = new Chart(chartCanvas, {
+          type: 'line', // or 'bar', 'pie', etc.
+          data: {
+            labels: labels,
+            datasets: datasets
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              title: {
+                display: true,
+                text: 'Data from Excel'
+              },
+              legend: {
+                display: true
+              }
+            }
+          }
+        });
+      };
+      
+      // Read file as an ArrayBuffer (binary)
+      reader.readAsArrayBuffer(file);
+    }
+  </script>
+</body>
+</html>

@@ -1,127 +1,693 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="he">
 <head>
   <meta charset="UTF-8" />
-  <title>Excel to Chart</title>
+  <title>כלי עזר למתמחים בישראל</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      direction: rtl; /* כתיבה מימין לשמאל */
+      background: #f7f9fa;
+    }
+
+    /* כותרת עם גרדיאנט */
+    header {
+      background: linear-gradient(120deg, #3F51B5, #03A9F4);
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    header h1 {
+      margin: 0;
+      font-weight: normal;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 0 20px;
+    }
+
+    /* אזור הדגשה בראש העמוד */
+    .highlight-section {
+      background: linear-gradient(120deg, #FF9800, #FFC107);
+      color: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      margin-bottom: 30px;
+      text-align: right;
+    }
+    .highlight-section h2 {
+      margin: 0 0 10px 0;
+    }
+    .top-departments-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    .top-department-card {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 5px;
+      padding: 15px;
+      flex: 1 1 250px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      min-width: 250px;
+    }
+    .top-department-card h3 {
+      margin: 0 0 8px 0;
+    }
+
+    /* חלק של בחירת מחלקה */
+    .filter-section {
+      margin: 20px 0;
+      text-align: right;
+    }
+    .filter-section label {
+      font-weight: bold;
+      margin-right: 10px;
+    }
+    .filter-section select {
+      padding: 5px;
+      font-size: 1rem;
+    }
+
+    /* טבלה */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      margin-top: 20px;
+    }
+    table thead {
+      background: #e7e7e7;
+    }
+    table th, table td {
+      padding: 12px;
+      border: 1px solid #ccc;
+      text-align: center;
+      font-size: 0.95rem;
+    }
+    /* צביעה לסירוגין של שורות הטבלה */
+    table tbody tr:nth-child(even) {
+      background: #f0f0f0;
+    }
+
+    /* גרף */
+    .chart-container {
+      width: 100%;
+      max-width: 800px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 10px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    /* פוטר */
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #fafafa;
+      margin-top: 40px;
+      font-size: 0.9rem;
+      color: #555;
+    }
+  </style>
 </head>
 <body>
-  <h1>Upload Excel File and Plot Data</h1>
-  
-  <!-- File input -->
-  <input type="file" id="excelFile" accept=".xlsx, .xls" />
-  
-  <!-- Chart container -->
-  <div style="width: 80%; max-width: 800px; margin-top: 30px;">
-    <canvas id="myChart"></canvas>
-  </div>
-  
-  <!-- SheetJS (xlsx) from CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <!-- Chart.js from CDN -->
+
+  <header>
+    <h1>כלי עזר לבחירת התמחות בבתי חולים בישראל</h1>
+  </header>
+
+  <main>
+
+    <!-- אזור הדגשה: מציג 3 מחלקות עם הדירוג הגבוה ביותר -->
+    <section class="highlight-section">
+      <h2>3 המחלקות עם הדירוג הגבוה ביותר</h2>
+      <div class="top-departments-container" id="topDepartments">
+        <!-- יתמלא דינמית ע"י JavaScript -->
+      </div>
+    </section>
+
+    <!-- פילטר לבחירת מחלקה -->
+    <div class="filter-section">
+      <label for="departmentFilter">בחר מחלקה:</label>
+      <select id="departmentFilter">
+        <option value="all">הכול</option>
+        <option value="הרדמה">הרדמה</option>
+        <option value="פנימית">פנימית</option>
+        <option value="נשים">נשים</option>
+        <option value="ילדים">ילדים</option>
+        <option value="רפואה דחופה">רפואה דחופה</option>
+      </select>
+    </div>
+
+    <!-- טבלת מחלקות -->
+    <table id="departmentsTable">
+      <thead>
+        <tr>
+          <th>בית חולים</th>
+          <th>מחלקה</th>
+          <th>דירוג שביעות רצון</th>
+          <th>% בוגרי ארץ</th>
+          <th>% מעבר מבחני שלב א</th>
+          <th>תורנויות/חודש</th>
+          <th>זמן המתנה (חודשים)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- מתמלא דינמית דרך JavaScript -->
+      </tbody>
+    </table>
+
+    <!-- גרף דירוגים -->
+    <div class="chart-container">
+      <canvas id="ratingChart"></canvas>
+    </div>
+  </main>
+
+  <footer>
+    &copy; 2025 כלי עזר למתמחים – מידע פיקטיבי לדוגמה
+  </footer>
+
+  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.0.1/dist/chart.umd.min.js"></script>
-  
   <script>
-    // Grabbing references to our DOM elements
-    const fileInput = document.getElementById('excelFile');
-    const chartCanvas = document.getElementById('myChart');
-    let myChart; // We'll store the Chart.js instance here
-    
-    // Event listener for file input
-    fileInput.addEventListener('change', handleFile, false);
-    
-    function handleFile(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const data = new Uint8Array(e.target.result);
-        // Read the workbook from the binary data
-        const workbook = XLSX.read(data, { type: 'array' });
-        
-        // Get the first worksheet name (for simplicity)
-        const firstSheetName = workbook.SheetNames[0];
-        const worksheet = workbook.Sheets[firstSheetName];
-        
-        // Convert the sheet to JSON
-        const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-        // jsonData is an array of arrays, e.g.:
-        // [
-        //   ["Header1", "Header2", "Header3"],
-        //   [ value1,   value2,    value3   ],
-        //   [ value1,   value2,    value3   ],
-        //   ...
-        // ]
-        
-        // The first row is assumed to be headers:
-        const headers = jsonData[0];
-        
-        // The remaining rows (if any) are data
-        const dataRows = jsonData.slice(1);
-        
-        // If there's nothing to plot, just exit
-        if (!headers || headers.length === 0 || dataRows.length === 0) {
-          alert("No valid data found in the uploaded file.");
-          return;
-        }
-        
-        // Let's assume the first column will be the x-axis labels, 
-        // and the other columns will be separate datasets
-        //
-        // If the first column is not your labels, adjust accordingly.
-        
-        // Extract labels from the first column
-        const labels = dataRows.map(row => row[0]);
-        
-        // Prepare datasets for columns 2..N
-        // We'll skip column 0 since it's used as labels
-        const datasets = [];
-        
-        for (let col = 1; col < headers.length; col++) {
-          const columnName = headers[col];
-          
-          // Build an array of values for each row in this column
-          const colData = dataRows.map(row => {
-            // If the row doesn't have enough columns, return null/NaN
-            return (row[col] !== undefined) ? Number(row[col]) : null;
-          });
-          
-          datasets.push({
-            label: columnName,
-            data: colData,
-          });
-        }
-        
-        // Now let's plot with Chart.js
-        // If there's an existing chart, destroy it before creating a new one
-        if (myChart) {
-          myChart.destroy();
-        }
-        
-        myChart = new Chart(chartCanvas, {
-          type: 'line', // or 'bar', 'pie', etc.
-          data: {
-            labels: labels,
-            datasets: datasets
+    // נתוני Mock עבור כל בית חולים/מחלקה
+    const hospitalData = [
+      {
+        hospital: "המרכז הרפואי לגליל",
+        city: "נהריה",
+        founded: 1956,
+        department: "הרדמה",
+        satisfaction: 4.1,
+        localGrads: 80,
+        passStageA: 85,
+        onCalls: 6,
+        waitTime: 2
+      },
+      {
+        hospital: "המרכז הרפואי לגליל",
+        city: "נהריה",
+        founded: 1956,
+        department: "פנימית",
+        satisfaction: 3.8,
+        localGrads: 75,
+        passStageA: 80,
+        onCalls: 5,
+        waitTime: 3
+      },
+      {
+        hospital: "המרכז הרפואי לגליל",
+        city: "נהריה",
+        founded: 1956,
+        department: "נשים",
+        satisfaction: 4.3,
+        localGrads: 78,
+        passStageA: 88,
+        onCalls: 6,
+        waitTime: 4
+      },
+      {
+        hospital: "המרכז הרפואי לגליל",
+        city: "נהריה",
+        founded: 1956,
+        department: "ילדים",
+        satisfaction: 4.0,
+        localGrads: 83,
+        passStageA: 82,
+        onCalls: 5,
+        waitTime: 3
+      },
+      {
+        hospital: "המרכז הרפואי לגליל",
+        city: "נהריה",
+        founded: 1956,
+        department: "רפואה דחופה",
+        satisfaction: 3.5,
+        localGrads: 70,
+        passStageA: 78,
+        onCalls: 7,
+        waitTime: 5
+      },
+
+      {
+        hospital: "המרכז הרפואי זיו",
+        city: "צפת",
+        founded: 1910,
+        department: "הרדמה",
+        satisfaction: 3.9,
+        localGrads: 85,
+        passStageA: 80,
+        onCalls: 6,
+        waitTime: 2
+      },
+      {
+        hospital: "המרכז הרפואי זיו",
+        city: "צפת",
+        founded: 1910,
+        department: "פנימית",
+        satisfaction: 4.2,
+        localGrads: 83,
+        passStageA: 85,
+        onCalls: 5,
+        waitTime: 3
+      },
+      {
+        hospital: "המרכז הרפואי זיו",
+        city: "צפת",
+        founded: 1910,
+        department: "נשים",
+        satisfaction: 3.7,
+        localGrads: 76,
+        passStageA: 79,
+        onCalls: 6,
+        waitTime: 4
+      },
+      {
+        hospital: "המרכז הרפואי זיו",
+        city: "צפת",
+        founded: 1910,
+        department: "ילדים",
+        satisfaction: 4.1,
+        localGrads: 81,
+        passStageA: 83,
+        onCalls: 5,
+        waitTime: 2
+      },
+      {
+        hospital: "המרכז הרפואי זיו",
+        city: "צפת",
+        founded: 1910,
+        department: "רפואה דחופה",
+        satisfaction: 3.8,
+        localGrads: 72,
+        passStageA: 77,
+        onCalls: 7,
+        waitTime: 5
+      },
+
+      {
+        hospital: "המרכז הרפואי צפון - פוריה",
+        city: "טבריה",
+        founded: 1955,
+        department: "הרדמה",
+        satisfaction: 4.0,
+        localGrads: 79,
+        passStageA: 80,
+        onCalls: 5,
+        waitTime: 2
+      },
+      {
+        hospital: "המרכז הרפואי צפון - פוריה",
+        city: "טבריה",
+        founded: 1955,
+        department: "פנימית",
+        satisfaction: 3.7,
+        localGrads: 74,
+        passStageA: 78,
+        onCalls: 5,
+        waitTime: 3
+      },
+      {
+        hospital: "המרכז הרפואי צפון - פוריה",
+        city: "טבריה",
+        founded: 1955,
+        department: "נשים",
+        satisfaction: 4.3,
+        localGrads: 80,
+        passStageA: 82,
+        onCalls: 6,
+        waitTime: 4
+      },
+      {
+        hospital: "המרכז הרפואי צפון - פוריה",
+        city: "טבריה",
+        founded: 1955,
+        department: "ילדים",
+        satisfaction: 4.2,
+        localGrads: 82,
+        passStageA: 84,
+        onCalls: 4,
+        waitTime: 3
+      },
+      {
+        hospital: "המרכז הרפואי צפון - פוריה",
+        city: "טבריה",
+        founded: 1955,
+        department: "רפואה דחופה",
+        satisfaction: 3.9,
+        localGrads: 73,
+        passStageA: 76,
+        onCalls: 6,
+        waitTime: 5
+      },
+
+      {
+        hospital: "מרכז רפואי העמק",
+        city: "עפולה",
+        founded: 1930,
+        department: "הרדמה",
+        satisfaction: 3.6,
+        localGrads: 82,
+        passStageA: 81,
+        onCalls: 5,
+        waitTime: 3
+      },
+      {
+        hospital: "מרכז רפואי העמק",
+        city: "עפולה",
+        founded: 1930,
+        department: "פנימית",
+        satisfaction: 4.1,
+        localGrads: 85,
+        passStageA: 88,
+        onCalls: 4,
+        waitTime: 2
+      },
+      {
+        hospital: "מרכז רפואי העמק",
+        city: "עפולה",
+        founded: 1930,
+        department: "נשים",
+        satisfaction: 3.9,
+        localGrads: 80,
+        passStageA: 83,
+        onCalls: 6,
+        waitTime: 5
+      },
+      {
+        hospital: "מרכז רפואי העמק",
+        city: "עפולה",
+        founded: 1930,
+        department: "ילדים",
+        satisfaction: 4.2,
+        localGrads: 84,
+        passStageA: 86,
+        onCalls: 5,
+        waitTime: 3
+      },
+      {
+        hospital: "מרכז רפואי העמק",
+        city: "עפולה",
+        founded: 1930,
+        department: "רפואה דחופה",
+        satisfaction: 3.7,
+        localGrads: 76,
+        passStageA: 79,
+        onCalls: 7,
+        waitTime: 4
+      },
+
+      {
+        hospital: "בית החולים נצרת (האנגלי)",
+        city: "נצרת",
+        founded: 1861,
+        department: "הרדמה",
+        satisfaction: 4.4,
+        localGrads: 85,
+        passStageA: 84,
+        onCalls: 5,
+        waitTime: 2
+      },
+      {
+        hospital: "בית החולים נצרת (האנגלי)",
+        city: "נצרת",
+        founded: 1861,
+        department: "פנימית",
+        satisfaction: 3.8,
+        localGrads: 81,
+        passStageA: 80,
+        onCalls: 5,
+        waitTime: 3
+      },
+      {
+        hospital: "בית החולים נצרת (האנגלי)",
+        city: "נצרת",
+        founded: 1861,
+        department: "נשים",
+        satisfaction: 4.0,
+        localGrads: 78,
+        passStageA: 85,
+        onCalls: 6,
+        waitTime: 4
+      },
+      {
+        hospital: "בית החולים נצרת (האנגלי)",
+        city: "נצרת",
+        founded: 1861,
+        department: "ילדים",
+        satisfaction: 4.1,
+        localGrads: 79,
+        passStageA: 83,
+        onCalls: 4,
+        waitTime: 3
+      },
+      {
+        hospital: "בית החולים נצרת (האנגלי)",
+        city: "נצרת",
+        founded: 1861,
+        department: "רפואה דחופה",
+        satisfaction: 3.9,
+        localGrads: 75,
+        passStageA: 76,
+        onCalls: 6,
+        waitTime: 4
+      },
+
+      {
+        hospital: "בית החולים המשפחה הקדושה (האיטלקי)",
+        city: "נצרת",
+        founded: 1882,
+        department: "הרדמה",
+        satisfaction: 3.5,
+        localGrads: 70,
+        passStageA: 78,
+        onCalls: 5,
+        waitTime: 2
+      },
+      {
+        hospital: "בית החולים המשפחה הקדושה (האיטלקי)",
+        city: "נצרת",
+        founded: 1882,
+        department: "פנימית",
+        satisfaction: 3.7,
+        localGrads: 72,
+        passStageA: 75,
+        onCalls: 5,
+        waitTime: 4
+      },
+      {
+        hospital: "בית החולים המשפחה הקדושה (האיטלקי)",
+        city: "נצרת",
+        founded: 1882,
+        department: "נשים",
+        satisfaction: 3.9,
+        localGrads: 76,
+        passStageA: 80,
+        onCalls: 6,
+        waitTime: 5
+      },
+      {
+        hospital: "בית החולים המשפחה הקדושה (האיטלקי)",
+        city: "נצרת",
+        founded: 1882,
+        department: "ילדים",
+        satisfaction: 4.0,
+        localGrads: 78,
+        passStageA: 82,
+        onCalls: 4,
+        waitTime: 3
+      },
+      {
+        hospital: "בית החולים המשפחה הקדושה (האיטלקי)",
+        city: "נצרת",
+        founded: 1882,
+        department: "רפואה דחופה",
+        satisfaction: 3.6,
+        localGrads: 74,
+        passStageA: 77,
+        onCalls: 6,
+        waitTime: 5
+      },
+
+      {
+        hospital: "בית החולים סן ונסן דה פול (הצרפתי)",
+        city: "נצרת",
+        founded: 1898,
+        department: "הרדמה",
+        satisfaction: 4.1,
+        localGrads: 82,
+        passStageA: 79,
+        onCalls: 5,
+        waitTime: 3
+      },
+      {
+        hospital: "בית החולים סן ונסן דה פול (הצרפתי)",
+        city: "נצרת",
+        founded: 1898,
+        department: "פנימית",
+        satisfaction: 3.9,
+        localGrads: 78,
+        passStageA: 80,
+        onCalls: 5,
+        waitTime: 3
+      },
+      {
+        hospital: "בית החולים סן ונסן דה פול (הצרפתי)",
+        city: "נצרת",
+        founded: 1898,
+        department: "נשים",
+        satisfaction: 4.2,
+        localGrads: 82,
+        passStageA: 83,
+        onCalls: 6,
+        waitTime: 4
+      },
+      {
+        hospital: "בית החולים סן ונסן דה פול (הצרפתי)",
+        city: "נצרת",
+        founded: 1898,
+        department: "ילדים",
+        satisfaction: 4.1,
+        localGrads: 80,
+        passStageA: 85,
+        onCalls: 5,
+        waitTime: 3
+      },
+      {
+        hospital: "בית החולים סן ונסן דה פול (הצרפתי)",
+        city: "נצרת",
+        founded: 1898,
+        department: "רפואה דחופה",
+        satisfaction: 3.7,
+        localGrads: 74,
+        passStageA: 78,
+        onCalls: 6,
+        waitTime: 5
+      }
+    ];
+
+    // אסמכתאות ל-HTML
+    const departmentFilter = document.getElementById('departmentFilter');
+    const tableBody = document.querySelector('#departmentsTable tbody');
+    const topDepartmentsContainer = document.getElementById('topDepartments');
+
+    let ratingChart; // כאן נאחסן את תרשים ה-Chart.js
+
+    // 1) מציג שלוש המחלקות עם הדירוג הגבוה ביותר בכלל הנתונים
+    function renderTopThree() {
+      // ממיין את הכל לפי satisfaction מהגבוה לנמוך
+      const sortedData = [...hospitalData].sort((a, b) => b.satisfaction - a.satisfaction);
+      const topThree = sortedData.slice(0, 3);
+
+      // מנקה תחילה
+      topDepartmentsContainer.innerHTML = '';
+
+      topThree.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'top-department-card';
+
+        card.innerHTML = `
+          <h3>${item.hospital}</h3>
+          <p>מחלקה: <strong>${item.department}</strong></p>
+          <p>דירוג שביעות רצון: <strong>${item.satisfaction.toFixed(1)}</strong></p>
+        `;
+        topDepartmentsContainer.appendChild(card);
+      });
+    }
+
+    // 2) מייצר שורות בטבלה לפי מחלקה נבחרת
+    function renderTable(department) {
+      // מנקה שורות קיימות
+      tableBody.innerHTML = '';
+
+      // סינון נתונים
+      let filteredData = hospitalData;
+      if (department !== 'all') {
+        filteredData = hospitalData.filter(item => item.department === department);
+      }
+
+      // יצירת שורות
+      filteredData.forEach(item => {
+        const row = document.createElement('tr');
+
+        row.innerHTML = `
+          <td>${item.hospital}</td>
+          <td>${item.department}</td>
+          <td>${item.satisfaction.toFixed(1)}</td>
+          <td>${item.localGrads}%</td>
+          <td>${item.passStageA}%</td>
+          <td>${item.onCalls}</td>
+          <td>${item.waitTime}</td>
+        `;
+
+        tableBody.appendChild(row);
+      });
+
+      // מעדכן את הגרף
+      updateChart(department, filteredData);
+    }
+
+    // 3) עידכון/יצירת תרשים עמודות (Chart.js)
+    function updateChart(department, filteredData) {
+      // אם כבר קיים גרף, הורסים אותו לפני יצירת חדש
+      if (ratingChart) {
+        ratingChart.destroy();
+      }
+
+      // מערכי Labels ו-Data
+      const labels = filteredData.map(item => item.hospital);
+      const satisfactionValues = filteredData.map(item => item.satisfaction);
+
+      // יצירת גרף חדש
+      const ctx = document.getElementById('ratingChart').getContext('2d');
+      ratingChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'דירוג שביעות רצון',
+            data: satisfactionValues
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            title: {
+              display: true,
+              text: department === 'all'
+                ? 'דירוג שביעות רצון (כל המחלקות)'
+                : `דירוג שביעות רצון במחלקת ${department}`
+            },
+            legend: {
+              display: false
+            }
           },
-          options: {
-            responsive: true,
-            plugins: {
-              title: {
-                display: true,
-                text: 'Data from Excel'
-              },
-              legend: {
-                display: true
-              }
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 5 // דירוג מקסימלי הוא 5
             }
           }
-        });
-      };
-      
-      // Read file as an ArrayBuffer (binary)
-      reader.readAsArrayBuffer(file);
+        }
+      });
     }
+
+    // אירוע החלפת מחלקה בפילטר
+    departmentFilter.addEventListener('change', () => {
+      const selectedDept = departmentFilter.value;
+      renderTable(selectedDept);
+    });
+
+    // הרצה ראשונית: 
+    // א. מציג את שלוש המחלקות המובילות
+    // ב. טוען את כל הנתונים בטבלה
+    renderTopThree();
+    renderTable('all');
   </script>
 </body>
 </html>

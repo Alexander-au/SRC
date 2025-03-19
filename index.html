@@ -4,20 +4,20 @@
   <meta charset="UTF-8" />
   <title>כלי עזר למתמחים בישראל</title>
   
-  <!-- 1. Load Material Icons -->
+  <!-- 1) Material Icons -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
 
   <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      direction: rtl; /* כתיבה מימין לשמאל */
+      direction: rtl; /* Hebrew (right-to-left) layout */
       background: #f7f9fa;
     }
 
-    /* כותרת עם גרדיאנט */
+    /* ---- Header with gradient background ---- */
     header {
-      background: linear-gradient(120deg, #60699a, #58bbe8);
+      background: linear-gradient(120deg, #3F51B5, #03A9F4);
       color: #fff;
       padding: 20px;
       text-align: center;
@@ -28,15 +28,16 @@
       font-weight: normal;
     }
 
+    /* ---- Main container ---- */
     main {
       max-width: 1200px;
       margin: 20px auto;
       padding: 0 20px;
     }
 
-    /* אזור הדגשה בראש העמוד */
+    /* ---- Highlight section: Top 3 departments ---- */
     .highlight-section {
-      background: linear-gradient(120deg, #419948, #318d36);
+      background: linear-gradient(120deg, #FF9800, #FFC107);
       color: #fff;
       padding: 20px;
       border-radius: 5px;
@@ -63,7 +64,7 @@
       margin: 0 0 8px 0;
     }
 
-    /* אזור האייקונים לבחירת מחלקה */
+    /* ---- Department icons for filtering ---- */
     .department-icons {
       display: flex;
       flex-wrap: wrap;
@@ -85,7 +86,6 @@
       transform: translateY(-3px);
       box-shadow: 0 5px 10px rgba(0,0,0,0.15);
     }
-    /* Style the material icon so it's bigger than default text size */
     .icon-card .material-icons {
       font-size: 48px;
       display: block;
@@ -97,28 +97,36 @@
       font-size: 0.9rem;
     }
 
-    /* טבלה */
+    /* ---- Table styling ---- */
     table {
       width: 100%;
       border-collapse: collapse;
       background: #fff;
       margin-top: 20px;
     }
-    table thead {
+    thead {
       background: #e7e7e7;
     }
-    table th, table td {
-      padding: 12px;
+    th, td {
       border: 1px solid #ccc;
+      padding: 12px;
       text-align: center;
       font-size: 0.95rem;
+      /* We’ll make the cursor pointer on TH for sorting */
     }
-    /* צביעה לסירוגין של שורות הטבלה */
-    table tbody tr:nth-child(even) {
+    th {
+      cursor: pointer;
+    }
+    /* Hover style for TH to indicate click sorting */
+    th:hover {
+      background: #dcdcdc;
+    }
+    /* Alternate row colors */
+    tbody tr:nth-child(even) {
       background: #f0f0f0;
     }
 
-    /* גרף */
+    /* ---- Chart container ---- */
     .chart-container {
       width: 100%;
       max-width: 800px;
@@ -129,7 +137,7 @@
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
 
-    /* פוטר */
+    /* ---- Footer ---- */
     footer {
       text-align: center;
       padding: 20px;
@@ -147,17 +155,17 @@
   </header>
 
   <main>
-    <!-- אזור הדגשה: מציג 3 מחלקות עם הדירוג הגבוה ביותר -->
+    <!-- 1) Highlight Section: Top 3 (by satisfaction) -->
     <section class="highlight-section">
-      <h2>המחלקות עם הדירוג הגבוה ביותר</h2>
+      <h2>3 המחלקות עם הדירוג הגבוה ביותר</h2>
       <div class="top-departments-container" id="topDepartments">
-        <!-- יתמלא דינמית ע"י JavaScript -->
+        <!-- Filled dynamically by JS -->
       </div>
     </section>
 
-    <!-- אייקונים לבחירת מחלקה -->
+    <!-- 2) Icon-based department selection -->
     <section class="department-icons" id="departmentIcons">
-      <!-- "הכול" -->
+      <!-- "all" -->
       <div class="icon-card" data-dept="all">
         <span class="material-icons">apps</span>
         <p>הכול</p>
@@ -189,25 +197,26 @@
       </div>
     </section>
 
-    <!-- טבלת מחלקות -->
+    <!-- 3) Sortable table of departments -->
     <table id="departmentsTable">
       <thead>
         <tr>
-          <th>בית חולים</th>
-          <th>מחלקה</th>
-          <th>דירוג שביעות רצון</th>
-          <th>% בוגרי ארץ</th>
-          <th>% מעבר מבחני שלב א</th>
-          <th>תורנויות/חודש</th>
-          <th>זמן המתנה (חודשים)</th>
+          <!-- data-sort must match keys in our data objects (hospital, department, satisfaction, etc.) -->
+          <th data-sort="hospital">בית חולים</th>
+          <th data-sort="department">מחלקה</th>
+          <th data-sort="satisfaction">דירוג שביעות רצון</th>
+          <th data-sort="localGrads">% בוגרי ארץ</th>
+          <th data-sort="passStageA">% מעבר מבחני שלב א</th>
+          <th data-sort="onCalls">תורנויות/חודש</th>
+          <th data-sort="waitTime">זמן המתנה (חודשים)</th>
         </tr>
       </thead>
       <tbody>
-        <!-- מתמלא דינמית דרך JavaScript -->
+        <!-- Filled dynamically by JS -->
       </tbody>
     </table>
 
-    <!-- גרף דירוגים -->
+    <!-- 4) Chart container -->
     <div class="chart-container">
       <canvas id="ratingChart"></canvas>
     </div>
@@ -219,61 +228,75 @@
 
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.0.1/dist/chart.umd.min.js"></script>
+  
   <script>
-    // Mock data (same as before)
+    // ==== Mock Data for demonstration (merge of previous examples) ====
     const hospitalData = [
-      { hospital: "המרכז הרפואי לגליל", city: "נהריה", founded: 1956, department: "הרדמה", satisfaction: 4.1, localGrads: 80, passStageA: 85, onCalls: 6, waitTime: 2 },
-      { hospital: "המרכז הרפואי לגליל", city: "נהריה", founded: 1956, department: "פנימית", satisfaction: 3.8, localGrads: 75, passStageA: 80, onCalls: 5, waitTime: 3 },
-      { hospital: "המרכז הרפואי לגליל", city: "נהריה", founded: 1956, department: "נשים", satisfaction: 4.3, localGrads: 78, passStageA: 88, onCalls: 6, waitTime: 4 },
-      { hospital: "המרכז הרפואי לגליל", city: "נהריה", founded: 1956, department: "ילדים", satisfaction: 4.0, localGrads: 83, passStageA: 82, onCalls: 5, waitTime: 3 },
-      { hospital: "המרכז הרפואי לגליל", city: "נהריה", founded: 1956, department: "רפואה דחופה", satisfaction: 3.5, localGrads: 70, passStageA: 78, onCalls: 7, waitTime: 5 },
-      { hospital: "המרכז הרפואי זיו", city: "צפת", founded: 1910, department: "הרדמה", satisfaction: 3.9, localGrads: 85, passStageA: 80, onCalls: 6, waitTime: 2 },
-      { hospital: "המרכז הרפואי זיו", city: "צפת", founded: 1910, department: "פנימית", satisfaction: 4.2, localGrads: 83, passStageA: 85, onCalls: 5, waitTime: 3 },
-      { hospital: "המרכז הרפואי זיו", city: "צפת", founded: 1910, department: "נשים", satisfaction: 3.7, localGrads: 76, passStageA: 79, onCalls: 6, waitTime: 4 },
-      { hospital: "המרכז הרפואי זיו", city: "צפת", founded: 1910, department: "ילדים", satisfaction: 4.1, localGrads: 81, passStageA: 83, onCalls: 5, waitTime: 2 },
-      { hospital: "המרכז הרפואי זיו", city: "צפת", founded: 1910, department: "רפואה דחופה", satisfaction: 3.8, localGrads: 72, passStageA: 77, onCalls: 7, waitTime: 5 },
-      { hospital: "המרכז הרפואי צפון - פוריה", city: "טבריה", founded: 1955, department: "הרדמה", satisfaction: 4.0, localGrads: 79, passStageA: 80, onCalls: 5, waitTime: 2 },
-      { hospital: "המרכז הרפואי צפון - פוריה", city: "טבריה", founded: 1955, department: "פנימית", satisfaction: 3.7, localGrads: 74, passStageA: 78, onCalls: 5, waitTime: 3 },
-      { hospital: "המרכז הרפואי צפון - פוריה", city: "טבריה", founded: 1955, department: "נשים", satisfaction: 4.3, localGrads: 80, passStageA: 82, onCalls: 6, waitTime: 4 },
-      { hospital: "המרכז הרפואי צפון - פוריה", city: "טבריה", founded: 1955, department: "ילדים", satisfaction: 4.2, localGrads: 82, passStageA: 84, onCalls: 4, waitTime: 3 },
+      { hospital: "המרכז הרפואי לגליל", city: "נהריה",  founded: 1956, department: "הרדמה",    satisfaction: 4.1, localGrads: 80, passStageA: 85, onCalls: 6, waitTime: 2 },
+      { hospital: "המרכז הרפואי לגליל", city: "נהריה",  founded: 1956, department: "פנימית",   satisfaction: 3.8, localGrads: 75, passStageA: 80, onCalls: 5, waitTime: 3 },
+      { hospital: "המרכז הרפואי לגליל", city: "נהריה",  founded: 1956, department: "נשים",     satisfaction: 4.3, localGrads: 78, passStageA: 88, onCalls: 6, waitTime: 4 },
+      { hospital: "המרכז הרפואי לגליל", city: "נהריה",  founded: 1956, department: "ילדים",    satisfaction: 4.0, localGrads: 83, passStageA: 82, onCalls: 5, waitTime: 3 },
+      { hospital: "המרכז הרפואי לגליל", city: "נהריה",  founded: 1956, department: "רפואה דחופה", satisfaction: 3.5, localGrads: 70, passStageA: 78, onCalls: 7, waitTime: 5 },
+
+      { hospital: "המרכז הרפואי זיו", city: "צפת",     founded: 1910, department: "הרדמה",    satisfaction: 3.9, localGrads: 85, passStageA: 80, onCalls: 6, waitTime: 2 },
+      { hospital: "המרכז הרפואי זיו", city: "צפת",     founded: 1910, department: "פנימית",   satisfaction: 4.2, localGrads: 83, passStageA: 85, onCalls: 5, waitTime: 3 },
+      { hospital: "המרכז הרפואי זיו", city: "צפת",     founded: 1910, department: "נשים",     satisfaction: 3.7, localGrads: 76, passStageA: 79, onCalls: 6, waitTime: 4 },
+      { hospital: "המרכז הרפואי זיו", city: "צפת",     founded: 1910, department: "ילדים",    satisfaction: 4.1, localGrads: 81, passStageA: 83, onCalls: 5, waitTime: 2 },
+      { hospital: "המרכז הרפואי זיו", city: "צפת",     founded: 1910, department: "רפואה דחופה", satisfaction: 3.8, localGrads: 72, passStageA: 77, onCalls: 7, waitTime: 5 },
+
+      { hospital: "המרכז הרפואי צפון - פוריה", city: "טבריה", founded: 1955, department: "הרדמה",    satisfaction: 4.0, localGrads: 79, passStageA: 80, onCalls: 5, waitTime: 2 },
+      { hospital: "המרכז הרפואי צפון - פוריה", city: "טבריה", founded: 1955, department: "פנימית",   satisfaction: 3.7, localGrads: 74, passStageA: 78, onCalls: 5, waitTime: 3 },
+      { hospital: "המרכז הרפואי צפון - פוריה", city: "טבריה", founded: 1955, department: "נשים",     satisfaction: 4.3, localGrads: 80, passStageA: 82, onCalls: 6, waitTime: 4 },
+      { hospital: "המרכז הרפואי צפון - פוריה", city: "טבריה", founded: 1955, department: "ילדים",    satisfaction: 4.2, localGrads: 82, passStageA: 84, onCalls: 4, waitTime: 3 },
       { hospital: "המרכז הרפואי צפון - פוריה", city: "טבריה", founded: 1955, department: "רפואה דחופה", satisfaction: 3.9, localGrads: 73, passStageA: 76, onCalls: 6, waitTime: 5 },
-      { hospital: "מרכז רפואי העמק", city: "עפולה", founded: 1930, department: "הרדמה", satisfaction: 3.6, localGrads: 82, passStageA: 81, onCalls: 5, waitTime: 3 },
-      { hospital: "מרכז רפואי העמק", city: "עפולה", founded: 1930, department: "פנימית", satisfaction: 4.1, localGrads: 85, passStageA: 88, onCalls: 4, waitTime: 2 },
-      { hospital: "מרכז רפואי העמק", city: "עפולה", founded: 1930, department: "נשים", satisfaction: 3.9, localGrads: 80, passStageA: 83, onCalls: 6, waitTime: 5 },
-      { hospital: "מרכז רפואי העמק", city: "עפולה", founded: 1930, department: "ילדים", satisfaction: 4.2, localGrads: 84, passStageA: 86, onCalls: 5, waitTime: 3 },
-      { hospital: "מרכז רפואי העמק", city: "עפולה", founded: 1930, department: "רפואה דחופה", satisfaction: 3.7, localGrads: 76, passStageA: 79, onCalls: 7, waitTime: 4 },
-      { hospital: "בית החולים נצרת (האנגלי)", city: "נצרת", founded: 1861, department: "הרדמה", satisfaction: 4.4, localGrads: 85, passStageA: 84, onCalls: 5, waitTime: 2 },
-      { hospital: "בית החולים נצרת (האנגלי)", city: "נצרת", founded: 1861, department: "פנימית", satisfaction: 3.8, localGrads: 81, passStageA: 80, onCalls: 5, waitTime: 3 },
-      { hospital: "בית החולים נצרת (האנגלי)", city: "נצרת", founded: 1861, department: "נשים", satisfaction: 4.0, localGrads: 78, passStageA: 85, onCalls: 6, waitTime: 4 },
-      { hospital: "בית החולים נצרת (האנגלי)", city: "נצרת", founded: 1861, department: "ילדים", satisfaction: 4.1, localGrads: 79, passStageA: 83, onCalls: 4, waitTime: 3 },
-      { hospital: "בית החולים נצרת (האנגלי)", city: "נצרת", founded: 1861, department: "רפואה דחופה", satisfaction: 3.9, localGrads: 75, passStageA: 76, onCalls: 6, waitTime: 4 },
-      { hospital: "בית החולים המשפחה הקדושה (האיטלקי)", city: "נצרת", founded: 1882, department: "הרדמה", satisfaction: 3.5, localGrads: 70, passStageA: 78, onCalls: 5, waitTime: 2 },
-      { hospital: "בית החולים המשפחה הקדושה (האיטלקי)", city: "נצרת", founded: 1882, department: "פנימית", satisfaction: 3.7, localGrads: 72, passStageA: 75, onCalls: 5, waitTime: 4 },
-      { hospital: "בית החולים המשפחה הקדושה (האיטלקי)", city: "נצרת", founded: 1882, department: "נשים", satisfaction: 3.9, localGrads: 76, passStageA: 80, onCalls: 6, waitTime: 5 },
-      { hospital: "בית החולים המשפחה הקדושה (האיטלקי)", city: "נצרת", founded: 1882, department: "ילדים", satisfaction: 4.0, localGrads: 78, passStageA: 82, onCalls: 4, waitTime: 3 },
-      { hospital: "בית החולים המשפחה הקדושה (האיטלקי)", city: "נצרת", founded: 1882, department: "רפואה דחופה", satisfaction: 3.6, localGrads: 74, passStageA: 77, onCalls: 6, waitTime: 5 },
-      { hospital: "בית החולים סן ונסן דה פול (הצרפתי)", city: "נצרת", founded: 1898, department: "הרדמה", satisfaction: 4.1, localGrads: 82, passStageA: 79, onCalls: 5, waitTime: 3 },
-      { hospital: "בית החולים סן ונסן דה פול (הצרפתי)", city: "נצרת", founded: 1898, department: "פנימית", satisfaction: 3.9, localGrads: 78, passStageA: 80, onCalls: 5, waitTime: 3 },
-      { hospital: "בית החולים סן ונסן דה פול (הצרפתי)", city: "נצרת", founded: 1898, department: "נשים", satisfaction: 4.2, localGrads: 82, passStageA: 83, onCalls: 6, waitTime: 4 },
-      { hospital: "בית החולים סן ונסן דה פול (הצרפתי)", city: "נצרת", founded: 1898, department: "ילדים", satisfaction: 4.1, localGrads: 80, passStageA: 85, onCalls: 5, waitTime: 3 },
-      { hospital: "בית החולים סן ונסן דה פול (הצרפתי)", city: "נצרת", founded: 1898, department: "רפואה דחופה", satisfaction: 3.7, localGrads: 74, passStageA: 78, onCalls: 6, waitTime: 5 }
+
+      { hospital: "מרכז רפואי העמק", city: "עפולה",    founded: 1930, department: "הרדמה",    satisfaction: 3.6, localGrads: 82, passStageA: 81, onCalls: 5, waitTime: 3 },
+      { hospital: "מרכז רפואי העמק", city: "עפולה",    founded: 1930, department: "פנימית",   satisfaction: 4.1, localGrads: 85, passStageA: 88, onCalls: 4, waitTime: 2 },
+      { hospital: "מרכז רפואי העמק", city: "עפולה",    founded: 1930, department: "נשים",     satisfaction: 3.9, localGrads: 80, passStageA: 83, onCalls: 6, waitTime: 5 },
+      { hospital: "מרכז רפואי העמק", city: "עפולה",    founded: 1930, department: "ילדים",    satisfaction: 4.2, localGrads: 84, passStageA: 86, onCalls: 5, waitTime: 3 },
+      { hospital: "מרכז רפואי העמק", city: "עפולה",    founded: 1930, department: "רפואה דחופה", satisfaction: 3.7, localGrads: 76, passStageA: 79, onCalls: 7, waitTime: 4 },
+
+      { hospital: "בית החולים נצרת (האנגלי)", city: "נצרת",    founded: 1861, department: "הרדמה",    satisfaction: 4.4, localGrads: 85, passStageA: 84, onCalls: 5, waitTime: 2 },
+      { hospital: "בית החולים נצרת (האנגלי)", city: "נצרת",    founded: 1861, department: "פנימית",   satisfaction: 3.8, localGrads: 81, passStageA: 80, onCalls: 5, waitTime: 3 },
+      { hospital: "בית החולים נצרת (האנגלי)", city: "נצרת",    founded: 1861, department: "נשים",     satisfaction: 4.0, localGrads: 78, passStageA: 85, onCalls: 6, waitTime: 4 },
+      { hospital: "בית החולים נצרת (האנגלי)", city: "נצרת",    founded: 1861, department: "ילדים",    satisfaction: 4.1, localGrads: 79, passStageA: 83, onCalls: 4, waitTime: 3 },
+      { hospital: "בית החולים נצרת (האנגלי)", city: "נצרת",    founded: 1861, department: "רפואה דחופה", satisfaction: 3.9, localGrads: 75, passStageA: 76, onCalls: 6, waitTime: 4 },
+
+      { hospital: "בית החולים המשפחה הקדושה (האיטלקי)", city: "נצרת", founded: 1882, department: "הרדמה",    satisfaction: 3.5, localGrads: 70, passStageA: 78, onCalls: 5, waitTime: 2 },
+      { hospital: "בית החולים המשפחה הקדושה (האיטלקי)", city: "נצרת", department: "פנימית",   satisfaction: 3.7, localGrads: 72, passStageA: 75, onCalls: 5, waitTime: 4 },
+      { hospital: "בית החולים המשפחה הקדושה (האיטלקי)", city: "נצרת", department: "נשים",     satisfaction: 3.9, localGrads: 76, passStageA: 80, onCalls: 6, waitTime: 5 },
+      { hospital: "בית החולים המשפחה הקדושה (האיטלקי)", city: "נצרת", department: "ילדים",    satisfaction: 4.0, localGrads: 78, passStageA: 82, onCalls: 4, waitTime: 3 },
+      { hospital: "בית החולים המשפחה הקדושה (האיטלקי)", city: "נצרת", department: "רפואה דחופה", satisfaction: 3.6, localGrads: 74, passStageA: 77, onCalls: 6, waitTime: 5 },
+
+      { hospital: "בית החולים סן ונסן דה פול (הצרפתי)", city: "נצרת", founded: 1898, department: "הרדמה",    satisfaction: 4.1, localGrads: 82, passStageA: 79, onCalls: 5, waitTime: 3 },
+      { hospital: "בית החולים סן ונסן דה פול (הצרפתי)", city: "נצרת", department: "פנימית",   satisfaction: 3.9, localGrads: 78, passStageA: 80, onCalls: 5, waitTime: 3 },
+      { hospital: "בית החולים סן ונסן דה פול (הצרפתי)", city: "נצרת", department: "נשים",     satisfaction: 4.2, localGrads: 82, passStageA: 83, onCalls: 6, waitTime: 4 },
+      { hospital: "בית החולים סן ונסן דה פול (הצרפתי)", city: "נצרת", department: "ילדים",    satisfaction: 4.1, localGrads: 80, passStageA: 85, onCalls: 5, waitTime: 3 },
+      { hospital: "בית החולים סן ונסן דה פול (הצרפתי)", city: "נצרת", department: "רפואה דחופה", satisfaction: 3.7, localGrads: 74, passStageA: 78, onCalls: 6, waitTime: 5 }
     ];
 
-    // DOM references
-    const tableBody = document.querySelector('#departmentsTable tbody');
+    // ==== State / References ====
+    let currentDepartment = 'all';       // Which department is currently selected
+    let currentSortColumn = null;        // e.g. 'hospital', 'satisfaction', ...
+    let sortAscending = true;           // Toggle on repeated clicks
+
     const topDepartmentsContainer = document.getElementById('topDepartments');
     const iconCards = document.querySelectorAll('.icon-card');
+    const tableBody = document.querySelector('#departmentsTable tbody');
+    const tableHeaders = document.querySelectorAll('#departmentsTable thead th');
+
     let ratingChart; // We'll store our Chart.js instance here
 
-    // 1) Show the top three departments by satisfaction (across all data)
+    // ========== 1) Render "Top 3" highlight cards ==========
     function renderTopThree() {
-      // Sort everything by satisfaction (descending)
+      // Sort everything by satisfaction descending
       const sortedData = [...hospitalData].sort((a, b) => b.satisfaction - a.satisfaction);
       const topThree = sortedData.slice(0, 3);
 
-      // Clear container first
+      // Clear container
       topDepartmentsContainer.innerHTML = '';
 
+      // Create a card for each top entry
       topThree.forEach(item => {
         const card = document.createElement('div');
         card.className = 'top-department-card';
@@ -286,45 +309,62 @@
       });
     }
 
-    // 2) Create table rows based on chosen department
-    function renderTable(department) {
-      // Clear existing rows
-      tableBody.innerHTML = '';
+    // ========== 2) Render the Table (with filter + sort) ==========
+    function renderTable() {
+      // 2A) Filter by department
+      let filteredData = (currentDepartment === 'all')
+        ? hospitalData
+        : hospitalData.filter(item => item.department === currentDepartment);
 
-      // Filter data
-      let filteredData = hospitalData;
-      if (department !== 'all') {
-        filteredData = hospitalData.filter(item => item.department === department);
+      // 2B) Sort by currentSortColumn if set
+      if (currentSortColumn) {
+        filteredData.sort((a, b) => {
+          const valA = a[currentSortColumn];
+          const valB = b[currentSortColumn];
+
+          // Numeric vs string
+          if (typeof valA === 'number' && typeof valB === 'number') {
+            return sortAscending ? valA - valB : valB - valA;
+          } else {
+            // Compare as strings
+            return sortAscending
+              ? String(valA).localeCompare(String(valB))
+              : String(valB).localeCompare(String(valA));
+          }
+        });
       }
 
-      // Build rows
+      // 2C) Clear existing rows
+      tableBody.innerHTML = '';
+
+      // 2D) Build new rows
       filteredData.forEach(item => {
         const row = document.createElement('tr');
         row.innerHTML = `
           <td>${item.hospital}</td>
           <td>${item.department}</td>
           <td>${item.satisfaction.toFixed(1)}</td>
-          <td>${item.localGrads}%</td>
-          <td>${item.passStageA}%</td>
+          <td>${item.localGrads}</td>
+          <td>${item.passStageA}</td>
           <td>${item.onCalls}</td>
           <td>${item.waitTime}</td>
         `;
         tableBody.appendChild(row);
       });
 
-      // Update chart
-      updateChart(department, filteredData);
+      // 2E) Update the chart with filtered data
+      updateChart(filteredData);
     }
 
-    // 3) Create or update bar chart (Chart.js)
-    function updateChart(department, filteredData) {
-      // If there's an existing chart, destroy it first
+    // ========== 3) Update Chart.js with filtered data ==========
+    function updateChart(data) {
+      // Destroy existing chart if any
       if (ratingChart) {
         ratingChart.destroy();
       }
 
-      const labels = filteredData.map(item => item.hospital);
-      const satisfactionValues = filteredData.map(item => item.satisfaction);
+      const labels = data.map(item => item.hospital);
+      const satisfactionValues = data.map(item => item.satisfaction);
 
       const ctx = document.getElementById('ratingChart').getContext('2d');
       ratingChart = new Chart(ctx, {
@@ -341,9 +381,9 @@
           plugins: {
             title: {
               display: true,
-              text: department === 'all'
+              text: (currentDepartment === 'all')
                 ? 'דירוג שביעות רצון (כל המחלקות)'
-                : `דירוג שביעות רצון במחלקת ${department}`
+                : `דירוג שביעות רצון במחלקת ${currentDepartment}`
             },
             legend: {
               display: false
@@ -352,24 +392,41 @@
           scales: {
             y: {
               beginAtZero: true,
-              max: 5 // satisfaction rating scale up to 5
+              max: 5 // Ratings up to 5
             }
           }
         }
       });
     }
 
-    // 4) Listen for clicks on each icon-card (instead of a dropdown)
-    iconCards.forEach(icon => {
-      icon.addEventListener('click', () => {
-        const selectedDept = icon.getAttribute('data-dept');
-        renderTable(selectedDept);
+    // ========== 4) Handle Sorting when clicking on a table header ==========
+    tableHeaders.forEach(th => {
+      th.addEventListener('click', () => {
+        const sortKey = th.getAttribute('data-sort');
+        // If clicking same column again, flip sort order
+        if (currentSortColumn === sortKey) {
+          sortAscending = !sortAscending;
+        } else {
+          currentSortColumn = sortKey;
+          sortAscending = true;
+        }
+        // Re-render
+        renderTable();
       });
     });
 
-    // Initial load
-    renderTopThree();
-    renderTable('all');  // Show all departments by default
+    // ========== 5) Handle Department Selection (Icons) ==========
+    iconCards.forEach(icon => {
+      icon.addEventListener('click', () => {
+        const selectedDept = icon.getAttribute('data-dept');
+        currentDepartment = selectedDept; // store new department
+        renderTable();
+      });
+    });
+
+    // ==== INITIAL LOAD ====
+    renderTopThree();   // Show top 3 cards (based on entire dataset)
+    renderTable();      // Default: all departments, no sort
   </script>
 </body>
 </html>
